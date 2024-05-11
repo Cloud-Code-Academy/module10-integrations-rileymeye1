@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : Riley Meyer
+ * @group             : 
+ * @last modified on  : 05-11-2024
+ * @last modified by  : Riley Meyer
+**/
 @IsTest
 public with sharing class DummyJSONCalloutTest {
 	// This test method will test the getDummyJSONUserFromId future method with a mock HTTP response.
@@ -129,7 +136,7 @@ public with sharing class DummyJSONCalloutTest {
 
 	@IsTest
 	static void testContactInsert() {
-		Contact cont = new Contact(FirstName = 'Test', LastName = 'User');
+		Contact cont = new Contact(FirstName = 'Test', LastName = 'User', DummyJSON_Id__c = '1');
 
 		// Register the mock callout class
 		Test.setMock(HttpCalloutMock.class, new DummyJSONCalloutMockGenerator());
