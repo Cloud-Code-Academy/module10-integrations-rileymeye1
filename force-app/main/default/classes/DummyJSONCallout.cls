@@ -47,7 +47,8 @@ public with sharing class DummyJSONCallout {
 		// If the HTTP response code is successful, parse the JSON response and update the contact.
 		Contact cont = null;
 		if (response.getStatusCode() == 200) {
-			
+			cont = createContactFromJson(response);
+			cont.DummyJSON_Id__c = dummyUserId;
 		}
 		upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
 	}
@@ -70,16 +71,24 @@ public with sharing class DummyJSONCallout {
 	@TestVisible // Allows test class to see this method. Since it is private, it would not be visible otherwise.
 	private static Contact createContactFromJson(String jsonResponse) {
 		// Deserialize the JSON string into map of primitive data types.
-
+		Map<String, Object> jsonMap = (Map<String, Object>) JSON.deserializeUntyped(jsonResponse);
 		// Create a new contact from the JSON response.
-
+		Contact con = new Contact();
 		// Set the contact fields from the JSON response.
-
+		con.FirstName = (String) jsonMap.get('firstName');
+		con.LastName = (String) jsonMap.get('lastName');
+		con.Email = (String) jsonMap.get('email');
+		con.Phone = (String) jsonMap.get('phone');
+		con.Birthdate = Date.valueOf((String) jsonMap.get('birthdate'));
 		// Deserialize the address from the JSON response.
-
+		Map<String, Object> addressMap = (Map<String, Object>) jsonMap.get('address');
 		// Set the address fields on the contact.
-
-		return null;
+		con.MailingStreet = (String) addressMap.get('address');
+		con.MailingCity = (String) addressMap.get('city');
+		con.MailingState = (String) addressMap.get('state');
+		con.MailingPostalCode = (String) addressMap.get('postalCode');
+		// return the new Contact to where this method was called from
+		return con;
 	}
 
 	/* 
