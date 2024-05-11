@@ -50,7 +50,7 @@ public with sharing class DummyJSONCallout {
 			cont = createContactFromJson(response);
 			cont.DummyJSON_Id__c = dummyUserId;
 		}
-		upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
+		Database.upsert(cont, DummyJSON_Id__c, AccessLevel.USER_MODE); //insert/update from the JSON response using the external id (dummyUserId)
 	}
 
 	/* 
